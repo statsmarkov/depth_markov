@@ -34,16 +34,16 @@ def simulate_reflective_random_walk(n_steps: int, num_processes: int, seed: int 
     lower_bound = -1
 
     # Initialize the array to store the walks
-    Y = np.zeros((num_processes, n_steps + 1))  # Include the initial position
+    Y = np.zeros((num_processes, n_steps))  # Include the initial position
 
     # Generate all steps at once for all processes
     all_steps = np.random.uniform(
-        low=lower_bound, high=upper_bound, size=(num_processes, n_steps)
+        low=lower_bound, high=upper_bound, size=(num_processes, n_steps - 1)
     )
 
     for i in range(num_processes):
         position = 0
-        for j in range(n_steps):
+        for j in range(n_steps - 1):
             new_position = position + all_steps[i, j]
             if new_position > upper_bound:
                 excess = new_position - upper_bound
