@@ -2,3 +2,4 @@ numpy
 jupyter
 matplotlib
 seaborn
+data_depth @ git+https://github.com/data-depth/library.git@80317cdb0bda3685a3bd473d19f961e05c85d043
