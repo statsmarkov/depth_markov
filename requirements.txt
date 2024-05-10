@@ -1323,7 +1323,9 @@ scikit-learn==1.4.2 \
     --hash=sha256:d9993d5e78a8148b1d0fdf5b15ed92452af5581734129998c26f481c46586d68 \
     --hash=sha256:daa1c471d95bad080c6e44b4946c9390a4842adc3082572c20e4f8884e39e959 \
     --hash=sha256:ff4effe5a1d4e8fed260a83a163f7dbf4f6087b54528d8880bab1d1377bd78be
-    # via data-depth
+    # via
+    #   -r requirements.in
+    #   data-depth
 scipy==1.13.0 \
     --hash=sha256:05f1432ba070e90d42d7fd836462c50bf98bd08bed0aa616c359eed8a04e3922 \
     --hash=sha256:09c74543c4fbeb67af6ce457f6a6a28e5d3739a87f62412e4a16e46f164f0ae5 \
