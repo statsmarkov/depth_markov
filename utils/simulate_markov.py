@@ -135,18 +135,24 @@ def simulate_arch_1_process_with_shock_anomaly(
     Returns:
     - List[np.ndarray]: List of simulated ARCH(1) processes with anomalies, each as a NumPy array.
     """
-
     if seed is not None:
         np.random.seed(seed)  # Ensure reproducibility in parallel processing
 
     processes_to_return = list()
     for _ in range(num_processes):
+        seed += 1
+
         if min_n_step:
-            k = np.random.randint(min_n_step, n_steps + 1)
+            k = (
+                10
+                * np.random.randint(
+                    low=min_n_step // 10, high=n_steps // 10 + 1, size=1
+                )[0]
+            )
         else:
             k = n_steps
 
-        t = np.random.randint(1, int((1 - anomaly_percent) * k) + 1)
+        t = np.random.randint(1, int((1 - anomaly_percent) * k))
 
         # Generate the first regular trajectory
         first_trajectory = simulate_arch_1_process(
@@ -160,7 +166,7 @@ def simulate_arch_1_process_with_shock_anomaly(
         )[0]
 
         # Calculate the size of the anomalous trajectory
-        anomaly_size = max(1, int(anomaly_percent * k))
+        anomaly_size = max(2, int(anomaly_percent * k))
 
         # Generate the anomalous part of the trajectory
         anomalous_trajectory = simulate_arch_1_process(
@@ -175,7 +181,7 @@ def simulate_arch_1_process_with_shock_anomaly(
 
         # Generate the second regular trajectory
         second_trajectory = simulate_arch_1_process(
-            n_steps=n_steps - len(first_trajectory) - len(anomalous_trajectory),
+            n_steps=k - len(first_trajectory) - len(anomalous_trajectory),
             m=m,
             sigma=sigma,
             initial_value=anomalous_trajectory[-1],
