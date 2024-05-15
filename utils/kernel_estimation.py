@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, List
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import uniform, bernoulli, norm
@@ -149,7 +149,7 @@ def nadaraya_watson_average_marginal_cdf_direct(
 
 
 def nadaraya_watson_average_marginal_pdf(
-    x: float, samples: np.ndarray, inverse_bandwidth=None
+    x: float, samples: List[np.ndarray], inverse_bandwidth=None
 ):
     """
     Nadaraya-Watson estimator of the PDF with Gaussian kernel based in several trajectories
@@ -175,7 +175,7 @@ def nadaraya_watson_average_marginal_pdf(
 
 
 def nadaraya_watson_average_marginal_cdf(
-    x: float, samples: np.ndarray, inverse_bandwidth=None
+    x: float, samples: List[np.ndarray], inverse_bandwidth=None
 ):
     """
     Nadaraya-Watson estimator of the CDF with Gaussian kernel based in several trajectories

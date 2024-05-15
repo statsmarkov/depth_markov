@@ -103,7 +103,7 @@ def simulate_arch_1_process(
     return processes_to_return
 
 
-def simulate_arch_1_process_with_shock_anomaly(
+def simulate_arch1_process_with_dynamic_anomaly(
     n_steps: int,
     m: callable,
     sigma: callable,
@@ -111,7 +111,7 @@ def simulate_arch_1_process_with_shock_anomaly(
     anomalous_sigma: callable,
     initial_value: float,
     num_processes: int,
-    anomaly_percent: float,
+    anomaly_size: float | int,
     min_n_step: int | None = None,
     noise: str = NORMAL_NOISE,
     seed: int = None,
@@ -125,7 +125,7 @@ def simulate_arch_1_process_with_shock_anomaly(
     - sigma (callable): Function representing the conditional volatility.
     - initial_value (float): Initial value for each process.
     - num_processes (int): Number of processes to simulate.
-    - anomaly_percent (float): Percentage of the trajectory to be anomalous.
+    - anomaly_size (float|int): If int, it is the size of the anomaly. If float, it is the percentage of the trajectory to be anomalous.
     - min_n_step (int | None, optional): Minimum number of steps for each process. If provided,
         the processes will have random lengths between min_n_step and n_steps. Default is None.
     - noise (str, optional): The type of noise to simulate. Can be either 'normal' or 'uniform'.
@@ -152,7 +152,12 @@ def simulate_arch_1_process_with_shock_anomaly(
         else:
             k = n_steps
 
-        t = np.random.randint(1, int((1 - anomaly_percent) * k))
+        # Calculate the size of the anomalous trajectory
+        if isinstance(anomaly_size, float):
+            anomalous_path_length = int(anomaly_size * k)
+        else:
+            anomalous_path_length = anomaly_size
+        t = np.random.randint(1, k - anomalous_path_length)
 
         # Generate the first regular trajectory
         first_trajectory = simulate_arch_1_process(
@@ -165,30 +170,37 @@ def simulate_arch_1_process_with_shock_anomaly(
             seed=seed,
         )[0]
 
-        # Calculate the size of the anomalous trajectory
-        anomaly_size = max(2, int(anomaly_percent * k))
-
         # Generate the anomalous part of the trajectory
         anomalous_trajectory = simulate_arch_1_process(
-            n_steps=anomaly_size,
+            n_steps=anomalous_path_length
+            + 1,  # Adding 1 because we will get rid of the first point
             m=anomalous_m,
             sigma=anomalous_sigma,
             initial_value=first_trajectory[-1],
             num_processes=1,
             noise=noise,
             seed=seed,
-        )[0]
+        )[0][
+            1:
+        ]  # We are getting rid of the first point because it will be equal to first_trajectory[-1]
 
         # Generate the second regular trajectory
         second_trajectory = simulate_arch_1_process(
-            n_steps=k - len(first_trajectory) - len(anomalous_trajectory),
+            n_steps=k
+            + 1
+            - len(first_trajectory)
+            - len(
+                anomalous_trajectory
+            ),  # Adding 1 because we will get rid of the first point
             m=m,
             sigma=sigma,
             initial_value=anomalous_trajectory[-1],
             num_processes=1,
             noise=noise,
             seed=seed,
-        )[0]
+        )[0][
+            1:
+        ]  # We are getting rid of the first point because it will be equal to anomalous_trajectory[-1]
 
         # Combine the trajectories
         combined_trajectory = np.concatenate(
