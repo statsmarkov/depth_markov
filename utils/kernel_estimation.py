@@ -198,3 +198,47 @@ def nadaraya_watson_average_marginal_cdf(
         return np.mean([est(y) for est in estimators])
 
     return estimator
+
+
+def queuing_model_marginal_cdf(x: float, data: np.array, inverse_bandwidth=None):
+    def estimation_zero(y):
+        counter = np.sum((data[1:] > 0) & (data[1:] - data[:-1] <= y)) + np.sum(
+            data[1:] <= 0
+        )
+        # To avoid returning 1.
+        if counter == len(data) - 1:
+            counter -= 1
+        return counter / (len(data) - 1)
+
+    # For x=0, we have a specific estimator
+    if x == 0:
+
+        return estimation_zero
+
+    def _marginal_cdf_queue(y):
+        if y >= x:
+            return estimation_zero(y - x)
+        else:
+            return nadaraya_watson_marginal_cdf(
+                x=x, data=data, inverse_bandwidth=inverse_bandwidth
+            )(y)
+
+    return _marginal_cdf_queue
+
+
+def queuing_model_average_marginal_cdf(
+    x: float, samples: List[np.ndarray], inverse_bandwidth=None
+):
+    estimators = list()
+    # TODO: Parallelize this.
+    for sample in samples:
+        estimators.append(
+            queuing_model_marginal_cdf(
+                x=x, data=sample, inverse_bandwidth=inverse_bandwidth
+            )
+        )
+
+    def estimator(y):
+        return np.mean([est(y) for est in estimators])
+
+    return estimator

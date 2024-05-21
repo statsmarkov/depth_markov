@@ -7,7 +7,7 @@ def shock_mean_fn(x):
 
 
 def shock_volatility_fn(x):
-    return np.sqrt(x)
+    return np.sqrt(np.abs(x))
 
 
 # Perturbed mean
