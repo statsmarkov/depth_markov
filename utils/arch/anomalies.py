@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.stats import norm
 
 
 # Shock
@@ -23,3 +24,20 @@ def increasing_volatility_fn(x):
 # Constant mean
 def constant_mean(x):
     return 2
+
+
+# Extra examples
+
+
+# Perturbed mean
+def extra_perturbed_mean_fn(x):
+    return 1 / (4 + np.exp(-x))
+
+
+def double_volatility_fn(x):
+    return 2 * norm.pdf(x + 1.2) + 1.5 * norm.pdf(x - 1.2)
+
+
+# Constant volatility
+def deterministic_volatility(x):
+    return 1

@@ -152,7 +152,7 @@ def calculate_markov_tukey_depth_for_trajectories_using_long_trajectory(
 
 
 def calculate_markov_tukey_depth_for_trajectories_using_sample_trajectories(
-    trajectories: np.ndarray,
+    trajectories: np.ndarray | List[np.array],
     sample_trajectories: List[np.ndarray],
     inverse_bandwidth: Optional[float] = None,
     marginal_cdf_estimator: Optional[str] = NADARAYA_WATSON,

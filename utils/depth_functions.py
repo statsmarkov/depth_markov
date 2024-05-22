@@ -19,6 +19,9 @@ def tukey_depth_dimension_1(x: float, cdf: typing.Callable) -> float:
         # If the cdf(x) is NaN, it indicates that x is not admissible for the
         # CDF we have (the CDF is degenerated).
         return 0
+    # Mass point at x
+    if cdf(x - 0.005) == 0:
+        return _y
     return np.min([_y, 1 - _y])
 
 

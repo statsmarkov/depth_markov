@@ -124,16 +124,6 @@ class MahalanobisClassifier:
         return mahalanobis(x=x, data=self._regular_trajectory)
 
 
-CLASSIFIERS = {
-    "Isolation Forest": IsolationForest,
-    "Local Outlier Factor": LocalOutlierFactor,
-    "Mahalanobis": MahalanobisClassifier,
-    "Support Vector Machine": SVC,
-    "Logistic Regression": LogisticRegression,
-    "K-Nearest Neighbors": KNeighborsClassifier,
-}
-
-
 def compare_using_training_sample(
     training_trajectories: List[np.array],
     normal_trajectories: List[np.array],
