@@ -20,8 +20,9 @@ def tukey_depth_dimension_1(x: float, cdf: typing.Callable) -> float:
         # CDF we have (the CDF is degenerated).
         return 0
     # Mass point at x
-    if cdf(x - 0.005) == 0:
-        return _y
+    # Only use this if the cdf is degenerated at x
+    # if cdf(x - 0.005) == 0:
+    #     return _y
     return np.min([_y, 1 - _y])
 
 
