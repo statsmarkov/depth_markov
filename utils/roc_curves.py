@@ -31,9 +31,9 @@ def plot_roc_curve(
     plt.plot([0, 1], [0, 1], color="navy", lw=2, linestyle="--")
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
-    plt.xlabel("False Positive Rate", fontsize=16)
-    plt.ylabel("True Positive Rate", fontsize=16)
+    plt.xlabel("False Positive Rate", fontsize=24)
+    plt.ylabel("True Positive Rate", fontsize=24)
     if title:
         plt.title(title)
-    plt.legend(loc="lower right", fontsize=16)
+    plt.legend(loc="lower right", fontsize=24)
     return fpr, tpr, thresholds, roc_auc
